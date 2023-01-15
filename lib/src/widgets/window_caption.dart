@@ -86,23 +86,15 @@ class _WindowCaptionState extends State<WindowCaption> with WindowListener {
               ),
             ),
           ),
-          FutureBuilder<bool>(
-            future: windowManager.isMaximized(),
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              if (snapshot.data == true) {
-                return WindowCaptionButton.unmaximize(
-                  brightness: widget.brightness,
-                  onPressed: () {
-                    windowManager.unmaximize();
-                  },
-                );
+          WindowCaptionButton.minimize(
+            brightness: widget.brightness,
+            onPressed: () async {
+              bool isMinimized = await windowManager.isMinimized();
+              if (isMinimized) {
+                windowManager.restore();
+              } else {
+                windowManager.minimize();
               }
-              return WindowCaptionButton.maximize(
-                brightness: widget.brightness,
-                onPressed: () {
-                  windowManager.maximize();
-                },
-              );
             },
           ),
           WindowCaptionButton.close(
